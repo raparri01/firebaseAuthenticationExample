@@ -8,7 +8,7 @@ class Register extends React.Component {
   //Define registration function prior to calling constructor
   onRegister = () => {
     const { email, password } = this.state;
-    Fire.auth().createUserWithEmailAndPassword(email, password)
+    Fire.auth().createUserAndRetrieveDataWithEmailAndPassword(email, password)
       .then((user) => {
         // If you need to do anything with the user, do it here
         // The user will be logged in automatically by the
@@ -16,7 +16,9 @@ class Register extends React.Component {
       })
       .catch((error) => {
         const { code, message } = error;
-        Alert.alert(message);
+        this.setState({
+          errorMessage:message
+        })
         // For details of error codes, see the docs
         // The message contains the default Firebase string
         // representation of the error
@@ -34,6 +36,7 @@ class Register extends React.Component {
       username:"",
       password:"",
       confirmPassword:"",
+      errorMessage:'',
     }
   }
   static navigationOptions = {
@@ -73,6 +76,14 @@ class Register extends React.Component {
                 />
             </Item>
           </Form>
+          <Text
+            style = {{
+              padding: 10,
+              alignSelf:'center',
+              color:'red',
+              textAlign:'center'
+            }}
+            >{this.state.errorMessage}</Text>
             <Button transparent style = {styles.button}
               onPress = {this.onRegister}>
               <Text style = {{fontSize:25,}}>Sign Up</Text>

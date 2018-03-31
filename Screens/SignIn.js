@@ -7,7 +7,7 @@ class SignIn extends React.Component {
 
   onLogin = () => {
     const { email, password } = this.state;
-    Fire.auth().signInWithEmailAndPassword(email, password)
+    Fire.auth().signInAndRetrieveDataWithEmailAndPassword(email, password)
       .then((user) => {
         console.log('Login Successful');
         // If you need to do anything with the user, do it here
@@ -16,7 +16,9 @@ class SignIn extends React.Component {
       })
       .catch((error) => {
         const { code, message } = error;
-        Alert.alert(message);
+        this.setState({
+          errorMessage:message
+        })
         // For details of error codes, see the docs
         // The message contains the default Firebase string
         // representation of the error
@@ -31,7 +33,11 @@ class SignIn extends React.Component {
     super(props);
     this.onLogin = this.onLogin.bind(this);
 
-    this.state = { email:'', password:'' }
+    this.state = {
+      email:'',
+      password:'',
+      message:'',
+      }
   }
 
   render(){
@@ -54,6 +60,14 @@ class SignIn extends React.Component {
                 />
             </Item>
           </Form>
+          <Text
+            style = {{
+              padding: 10,
+              alignSelf:'center',
+              color:'red',
+              textAlign:'center'
+            }}
+            >{this.state.errorMessage}</Text>
           <Button
             transparent style = {styles.button}
             onPress = {this.onLogin}
