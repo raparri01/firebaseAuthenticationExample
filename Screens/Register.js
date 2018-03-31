@@ -15,13 +15,27 @@ class Register extends React.Component {
         // `onAuthStateChanged` listener we set up in App.js earlier
       })
       .catch((error) => {
-        const { code, message } = error;
-        this.setState({
-          errorMessage:message
-        })
         // For details of error codes, see the docs
         // The message contains the default Firebase string
         // representation of the error
+        //
+        const { code, message } = error;
+        this.setState({
+          errorMessage:code
+        })
+        var errorMessage;
+        //Custom Error Fix Suggestions based on error code.
+        switch(code){
+          case 'auth/invalid-email':
+            errorMessage = 'Enter a valid email address'
+            break;
+          case 'auth/weak-password':
+            errorMessage = 'Invalid Password (Must be at least 6 characters)'
+            break;
+        }
+        this.setState({
+          errorMessage:errorMessage
+        })
       });
   }
 
@@ -37,6 +51,7 @@ class Register extends React.Component {
       password:"",
       confirmPassword:"",
       errorMessage:'',
+      errorMessageFix:[],
     }
   }
   static navigationOptions = {

@@ -15,10 +15,27 @@ class SignIn extends React.Component {
         // `onAuthStateChanged` listener we set up in App.js earlier
       })
       .catch((error) => {
+        var errorMessage;
+
         const { code, message } = error;
+        errorMessage = code;
+
+        //Custom Error Fix Suggestions based on error code.
+        switch(code){
+          case 'auth/wrong-password':
+            errorMessage = 'Email or password is incorrect'
+            break;
+          case 'auth/invalid-email':
+            errorMessage = 'Enter a valid email address';
+            break;
+          case 'auth/user-not-found':
+            errorMessage = 'Email or password is incorrect';
+            break;
+        }
         this.setState({
-          errorMessage:message
+          errorMessage:errorMessage
         })
+
         // For details of error codes, see the docs
         // The message contains the default Firebase string
         // representation of the error
@@ -36,7 +53,7 @@ class SignIn extends React.Component {
     this.state = {
       email:'',
       password:'',
-      message:'',
+      errorMessage:'',
       }
   }
 
